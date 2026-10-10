@@ -1,0 +1,8 @@
+{
+  "name": "MediVault — Smart Medicine Reminder & Digital Medical Record Management System",
+  "description": "Clinical-grade digital medical record vault and intelligent medication reminder system with HIPAA-compliant encrypted storage and adherence tracking.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
