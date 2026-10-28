@@ -161,23 +161,23 @@ export const MedicalRecordsView: React.FC = () => {
           </select>
 
           <button
-            className="inline-flex items-center gap-1 h-8 px-3.5 bg-teal-700 hover:bg-teal-800 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 h-8 px-3.5 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs"
             onClick={() => setUploadModalOpen(true)}
             type="button"
           >
-            <span className="material-symbols-outlined text-[16px]">add</span>
+            <span className="material-symbols-outlined text-[16px]">upload_file</span>
             <span>Upload Report</span>
           </button>
         </div>
       </div>
 
       {/* Minimal Search & Filter Bar */}
-      <div className="bg-white rounded-xl p-3 border border-slate-200 flex flex-col gap-3">
+      <div className="bg-white rounded-xl p-3 border border-neutral-200 flex flex-col gap-3">
         <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-slate-400 pl-1 text-[18px]">search</span>
+          <span className="material-symbols-outlined text-neutral-400 pl-1 text-[18px]">search</span>
           <input
-            className="flex-1 bg-transparent py-1 text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none"
-            placeholder="Search by report name, lab, doctor, or biomarker..."
+            className="flex-1 bg-transparent py-1 text-sm text-neutral-900 placeholder:text-neutral-400 focus:outline-none"
+            placeholder="Search by test name, lab package, doctor, or biomarker..."
             type="text"
             value={localSearch}
             onChange={(e) => setLocalSearch(e.target.value)}
@@ -185,17 +185,17 @@ export const MedicalRecordsView: React.FC = () => {
           {localSearch && (
             <button
               onClick={() => setLocalSearch('')}
-              className="text-slate-400 hover:text-slate-700 text-xs"
+              className="text-neutral-400 hover:text-neutral-700 text-xs"
             >
               Clear
             </button>
           )}
           <button
             onClick={() => setAdvancedFiltersOpen(!advancedFiltersOpen)}
-            className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-medium transition-colors cursor-pointer ${
+            className={`flex items-center gap-1 px-2.5 py-1 rounded-md text-xs font-bold transition-colors cursor-pointer ${
               advancedFiltersOpen
-                ? 'bg-slate-900 text-white'
-                : 'bg-slate-100 text-slate-700 hover:bg-slate-200'
+                ? 'bg-[#ff6f61] text-white'
+                : 'bg-neutral-100 text-neutral-700 hover:bg-neutral-200'
             }`}
             type="button"
           >
@@ -205,31 +205,31 @@ export const MedicalRecordsView: React.FC = () => {
         </div>
 
         {advancedFiltersOpen && (
-          <div className="pt-3 border-t border-slate-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
+          <div className="pt-3 border-t border-neutral-100 grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs">
             <div>
-              <label className="block text-slate-500 mb-1">From Date</label>
+              <label className="block text-neutral-500 mb-1">From Date</label>
               <input
                 type="date"
-                className="w-full h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                className="w-full h-8 px-2 bg-neutral-50 border border-neutral-200 rounded-lg text-xs"
                 value={filterStartDate}
                 onChange={(e) => setFilterStartDate(e.target.value)}
               />
             </div>
             <div>
-              <label className="block text-slate-500 mb-1">To Date</label>
+              <label className="block text-neutral-500 mb-1">To Date</label>
               <input
                 type="date"
-                className="w-full h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                className="w-full h-8 px-2 bg-neutral-50 border border-neutral-200 rounded-lg text-xs"
                 value={filterEndDate}
                 onChange={(e) => setFilterEndDate(e.target.value)}
               />
             </div>
             <div>
-              <label className="block text-slate-500 mb-1">Provider Filter</label>
+              <label className="block text-neutral-500 mb-1">Provider Filter</label>
               <input
                 type="text"
-                placeholder="e.g. Quest Diagnostics"
-                className="w-full h-8 px-2 bg-slate-50 border border-slate-200 rounded-lg text-xs"
+                placeholder="e.g. Central Diagnostic Lab"
+                className="w-full h-8 px-2 bg-neutral-50 border border-neutral-200 rounded-lg text-xs"
                 value={filterProvider}
                 onChange={(e) => setFilterProvider(e.target.value)}
               />
@@ -238,7 +238,7 @@ export const MedicalRecordsView: React.FC = () => {
         )}
       </div>
 
-      {/* Minimal Category Segmented Filter */}
+      {/* 1mg Style Category Filter Chips */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-1 scrollbar-none text-xs">
         {categories.map((cat) => {
           const isActive = selectedCategory === cat;
@@ -247,15 +247,15 @@ export const MedicalRecordsView: React.FC = () => {
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`whitespace-nowrap px-3 py-1.5 rounded-lg font-medium transition-colors flex items-center gap-1.5 cursor-pointer ${
+              className={`whitespace-nowrap px-3.5 py-1.5 rounded-lg font-bold transition-colors flex items-center gap-1.5 cursor-pointer ${
                 isActive
-                  ? 'bg-slate-900 text-white shadow-xs'
-                  : 'bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                  ? 'bg-[#fff2ef] text-[#ff6f61] border border-[#ff6f61]/40 shadow-2xs'
+                  : 'bg-white border border-neutral-200 text-neutral-600 hover:bg-neutral-50 hover:text-neutral-900'
               }`}
               type="button"
             >
               <span>{cat}</span>
-              <span className={`text-[11px] font-mono ${isActive ? 'text-slate-300' : 'text-slate-400'}`}>
+              <span className={`text-[11px] font-mono ${isActive ? 'text-[#ff6f61]' : 'text-neutral-400'}`}>
                 {count}
               </span>
             </button>

@@ -400,8 +400,8 @@ export const TimelineView: React.FC = () => {
               </span>
               <button
                 type="button"
+                className="text-[#005761] font-semibold hover:underline cursor-pointer"
                 onClick={handleSyncNow}
-                className="text-teal-700 font-medium hover:underline cursor-pointer"
               >
                 Sync Now
               </button>

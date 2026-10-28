@@ -36,7 +36,7 @@ const AppContent: React.FC = () => {
 
       {/* Main Clinical Portal Workspace */}
       <div className="pl-60">
-        <main className="w-full min-h-screen pt-16 bg-slate-50 px-6 lg:px-8 pb-10">
+        <main className="w-full min-h-screen pt-16 bg-[#f8f9fa] px-6 lg:px-8 pb-10">
           {activeTab === 'dashboard' && <DashboardView />}
           {activeTab === 'medical-records' && <MedicalRecordsView />}
           {activeTab === 'medicines' && <MedicinesView />}

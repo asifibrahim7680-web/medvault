@@ -28,11 +28,11 @@ export const AddAppointmentModal: React.FC = () => {
     addAppointment({
       doctorName: doctorName.trim(),
       specialty,
-      clinicHospital: clinicHospital.trim() || 'Regional Medical Health Center',
+      clinicHospital: clinicHospital.trim() || 'Central Multi-Specialty Hospital',
       appointmentDate,
       appointmentTime,
       endTime,
-      locationRoom: locationRoom.trim() || 'Main Consultation Wing',
+      locationRoom: locationRoom.trim() || 'Consultation Pavilion • Suite 402',
       type,
       status: 'upcoming',
       notes: notes.trim(),

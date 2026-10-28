@@ -223,7 +223,7 @@ export const SettingsView: React.FC = () => {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-medium cursor-pointer"
+              className="px-4 py-2 bg-[#ff6f61] hover:bg-[#e55345] text-white rounded-lg text-xs font-bold cursor-pointer shadow-xs"
             >
               Save Profile Changes
             </button>
@@ -306,7 +306,7 @@ export const SettingsView: React.FC = () => {
           <div className="flex justify-end pt-2">
             <button
               type="submit"
-              className="px-4 py-2 bg-teal-700 hover:bg-teal-800 text-white rounded-lg text-xs font-medium cursor-pointer"
+              className="px-4 py-2 bg-[#ff6f61] hover:bg-[#e55345] text-white rounded-lg text-xs font-bold cursor-pointer shadow-xs"
             >
               Save Preferences
             </button>

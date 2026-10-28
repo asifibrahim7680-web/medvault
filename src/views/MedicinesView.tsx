@@ -137,11 +137,11 @@ export const MedicinesView: React.FC = () => {
             <span>Print Medication Card</span>
           </button>
           <button
-            className="inline-flex items-center gap-1.5 h-8 px-3.5 bg-teal-700 hover:bg-teal-800 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 h-8 px-3.5 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs"
             type="button"
             onClick={() => setAddMedModalOpen(true)}
           >
-            <span className="material-symbols-outlined text-[16px]">add</span>
+            <span className="material-symbols-outlined text-[16px]">add_circle</span>
             <span>Add Medication</span>
           </button>
         </div>
@@ -150,13 +150,13 @@ export const MedicinesView: React.FC = () => {
       {/* Hero Strip: Score (8 cols) + Refill Card (4 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         {/* Score Card */}
-        <div className="lg:col-span-8 bg-white rounded-xl p-5 border border-slate-200 flex flex-col justify-between">
+        <div className="lg:col-span-8 bg-white rounded-xl p-5 border border-neutral-200 flex flex-col justify-between">
           <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
             <div className="flex items-center gap-4">
               <div className="relative w-16 h-16 flex items-center justify-center shrink-0">
                 <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                   <circle
-                    className="text-slate-100 stroke-current"
+                    className="text-neutral-100 stroke-current"
                     cx="50"
                     cy="50"
                     fill="transparent"
@@ -164,7 +164,7 @@ export const MedicinesView: React.FC = () => {
                     strokeWidth="8"
                   ></circle>
                   <circle
-                    className="text-teal-700 stroke-current"
+                    className="text-[#ff6f61] stroke-current"
                     cx="50"
                     cy="50"
                     fill="transparent"
@@ -175,31 +175,31 @@ export const MedicinesView: React.FC = () => {
                     strokeWidth="8"
                   ></circle>
                 </svg>
-                <span className="absolute text-sm font-bold text-slate-900 font-mono">96%</span>
+                <span className="absolute text-sm font-bold text-neutral-900 font-mono">96%</span>
               </div>
 
               <div>
-                <span className="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
                   Clinical Target Met
                 </span>
-                <h2 className="text-base font-semibold text-slate-900 mt-1">
+                <h2 className="text-base font-extrabold text-neutral-900 mt-1">
                   7-Day Adherence Performance
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  You've taken <strong className="text-slate-900">27 of 28</strong> scheduled doses this week.
+                <p className="text-xs text-neutral-500 mt-0.5">
+                  You've taken <strong className="text-neutral-900">27 of 28</strong> scheduled doses this week.
                 </p>
               </div>
             </div>
 
-            <div className="sm:text-right border-t sm:border-t-0 border-slate-100 pt-2 sm:pt-0 w-full sm:w-auto">
-              <span className="text-xs text-slate-400 block">Streak</span>
-              <span className="text-xl font-bold text-slate-900 font-mono">14 Days</span>
+            <div className="sm:text-right border-t sm:border-t-0 border-neutral-100 pt-2 sm:pt-0 w-full sm:w-auto">
+              <span className="text-xs text-neutral-400 block">Streak</span>
+              <span className="text-xl font-extrabold text-[#ff6f61] font-mono">14 Days</span>
               <span className="text-[11px] text-emerald-700 block mt-0.5">+4.2% vs last month</span>
             </div>
           </div>
 
           {/* 7-Day Mini Strip */}
-          <div className="grid grid-cols-7 gap-2 mt-4 pt-3 border-t border-slate-100 text-xs">
+          <div className="grid grid-cols-7 gap-2 mt-4 pt-3 border-t border-neutral-100 text-xs">
             {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'TODAY'].map((day) => {
               const isToday = day === 'TODAY';
               const isMissed = day === 'THU';
@@ -207,20 +207,20 @@ export const MedicinesView: React.FC = () => {
                 <div
                   key={day}
                   className={`flex flex-col items-center py-2 px-1 rounded-lg text-center ${
-                    isToday ? 'bg-teal-50' : isMissed ? 'bg-amber-50' : 'bg-slate-50'
+                    isToday ? 'bg-[#fff2ef]' : isMissed ? 'bg-amber-50' : 'bg-neutral-50'
                   }`}
                 >
-                  <span className="text-[10px] text-slate-400 font-medium">{day}</span>
+                  <span className="text-[10px] text-neutral-400 font-medium">{day}</span>
                   <span
                     className={`material-symbols-outlined text-[16px] my-1 ${
-                      isMissed ? 'text-amber-600' : isToday ? 'text-teal-700' : 'text-emerald-600'
+                      isMissed ? 'text-amber-600' : isToday ? 'text-[#ff6f61]' : 'text-emerald-600'
                     }`}
                   >
                     {isMissed ? 'warning' : 'check'}
                   </span>
                   <span
                     className={`text-[11px] font-mono font-medium ${
-                      isToday ? 'text-teal-900' : isMissed ? 'text-amber-800' : 'text-slate-700'
+                      isToday ? 'text-[#ff6f61] font-bold' : isMissed ? 'text-amber-800' : 'text-neutral-700'
                     }`}
                   >
                     {isMissed ? '3/4' : isToday ? '3/4' : '4/4'}
@@ -235,30 +235,31 @@ export const MedicinesView: React.FC = () => {
         <div className="lg:col-span-4 bg-white rounded-xl p-5 border border-slate-200 flex flex-col justify-between">
           <div>
             <div className="flex items-center justify-between pb-3 border-b border-slate-100 text-xs">
-              <span className="font-semibold text-rose-700 flex items-center gap-1">
-                <span className="material-symbols-outlined text-[15px]">notification_important</span>
-                Refill Warning
+              <span className="font-bold text-[#f58220] flex items-center gap-1">
+                <span className="material-symbols-outlined text-[15px]">local_pharmacy</span>
+                Pharmacy Refill Alert
               </span>
-              <span className="text-[11px] font-mono text-slate-400">8 Pills Left</span>
+              <span className="text-[11px] font-mono text-rose-600 font-semibold">8 Pills Left</span>
             </div>
-            <h3 className="text-sm font-semibold text-slate-900 mt-3">
+            <h3 className="text-sm font-bold text-slate-900 mt-3">
               Lisinopril 10 mg
             </h3>
             <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Prescription is running low with 8 days remaining. Refill processing requires 24–48 hours at CVS Pharmacy.
+              Prescription running low. Order with fast doorstep delivery to maintain treatment continuity.
             </p>
-            <div className="mt-3 p-2.5 bg-slate-50 rounded-lg text-xs flex justify-between text-slate-600">
-              <span>CVS #4210 · Rx #7728109</span>
-              <span className="font-medium text-slate-900">Dr. Aris Vance</span>
+            <div className="mt-3 p-2.5 bg-orange-50/50 rounded-lg text-xs flex justify-between text-slate-700 border border-orange-100">
+              <span className="font-medium text-[#c2410c]">Direct Pharmacy Delivery</span>
+              <span className="font-semibold text-slate-900">Dr. Rajesh Sharma</span>
             </div>
           </div>
 
           <button
-            className="w-full mt-4 h-9 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer shadow-xs"
+            className="w-full mt-4 h-9 bg-[#f58220] hover:bg-[#e06d0c] text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
             type="button"
             onClick={() => requestRefill('med-lisinopril')}
           >
-            One-Click Refill Request
+            <span className="material-symbols-outlined text-[16px]">shopping_bag</span>
+            <span>Order Doorstep Refill</span>
           </button>
         </div>
       </div>

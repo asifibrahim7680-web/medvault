@@ -124,7 +124,7 @@ END:VCALENDAR`;
             <button
               className={`flex items-center gap-1 px-3 py-1.5 rounded-md transition-colors cursor-pointer ${
                 viewType === 'list'
-                  ? 'bg-white text-slate-900 font-medium shadow-xs'
+                  ? 'bg-white text-slate-900 font-semibold shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
               onClick={() => setViewType('list')}
@@ -136,7 +136,7 @@ END:VCALENDAR`;
             <button
               className={`flex items-center gap-1 px-3 py-1.5 rounded-md transition-colors cursor-pointer ${
                 viewType === 'calendar'
-                  ? 'bg-white text-slate-900 font-medium shadow-xs'
+                  ? 'bg-white text-slate-900 font-semibold shadow-xs'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
               onClick={() => setViewType('calendar')}
@@ -148,29 +148,29 @@ END:VCALENDAR`;
           </div>
 
           <button
-            className="inline-flex items-center gap-1 h-8 px-3.5 bg-teal-700 hover:bg-teal-800 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer shadow-xs"
+            className="inline-flex items-center gap-1.5 h-8 px-3.5 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs"
             type="button"
             onClick={() => setAddAptModalOpen(true)}
           >
-            <span className="material-symbols-outlined text-[16px]">add</span>
-            <span>New Appointment</span>
+            <span className="material-symbols-outlined text-[16px]">calendar_add_on</span>
+            <span>Book Lab Test / Visit</span>
           </button>
         </div>
       </div>
 
       {/* Filter Tabs */}
-      <div className="flex items-center gap-1.5 border-b border-slate-200 pb-1 text-xs">
+      <div className="flex items-center gap-1.5 border-b border-neutral-200 pb-1 text-xs">
         {(['upcoming', 'completed', 'cancelled', 'all'] as const).map((filter) => (
           <button
             key={filter}
             onClick={() => setStatusFilter(filter)}
-            className={`px-3 py-1.5 rounded-lg font-medium capitalize transition-colors cursor-pointer ${
+            className={`px-3 py-1.5 rounded-lg font-bold capitalize transition-colors cursor-pointer ${
               statusFilter === filter
-                ? 'bg-slate-900 text-white shadow-xs'
-                : 'text-slate-600 hover:bg-slate-100 hover:text-slate-900'
+                ? 'bg-[#ff6f61] text-white shadow-xs'
+                : 'text-neutral-600 hover:bg-neutral-100 hover:text-neutral-900'
             }`}
           >
-            {filter}
+            {filter === 'upcoming' ? 'Upcoming Visits' : filter}
           </button>
         ))}
       </div>
@@ -257,8 +257,8 @@ END:VCALENDAR`;
                     <button
                       type="button"
                       onClick={() => handleToggleReminder(apt)}
-                      className={`inline-flex items-center gap-1 font-medium cursor-pointer ${
-                        apt.reminderSet ? 'text-teal-700' : 'text-slate-400 hover:text-slate-700'
+                      className={`inline-flex items-center gap-1 font-bold cursor-pointer ${
+                        apt.reminderSet ? 'text-[#ff6f61]' : 'text-neutral-400 hover:text-neutral-700'
                       }`}
                     >
                       <span className="material-symbols-outlined text-[15px]">

@@ -47,8 +47,8 @@ export const DashboardView: React.FC = () => {
 VERSION:2.0
 PRODID:-//MediVault Health//EN
 BEGIN:VEVENT
-SUMMARY:Doctor Visit: ${nextAppointment.doctorName} (${nextAppointment.specialty})
-DESCRIPTION:${nextAppointment.notes || 'Clinical consultation'}
+SUMMARY:Health Appointment: ${nextAppointment.doctorName} (${nextAppointment.specialty})
+DESCRIPTION:${nextAppointment.notes || 'Lab test collection & clinical review'}
 LOCATION:${nextAppointment.clinicHospital}, ${nextAppointment.locationRoom}
 DTSTART:${nextAppointment.appointmentDate.replace(/-/g, '')}T103000Z
 DTEND:${nextAppointment.appointmentDate.replace(/-/g, '')}T111500Z
@@ -60,7 +60,7 @@ END:VCALENDAR`;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `Appointment_${nextAppointment.doctorName.replace(/\s+/g, '_')}.ics`;
+    a.download = `MediVault_${nextAppointment.doctorName.replace(/\s+/g, '_')}.ics`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -77,192 +77,334 @@ END:VCALENDAR`;
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `MediVault_Audit_Trail_${new Date().toISOString().split('T')[0]}.csv`;
+    a.download = `MediVault_Audit_Log_${new Date().toISOString().split('T')[0]}.csv`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
-    showToast('Full HIPAA Audit Log exported to CSV.', 'success');
+    showToast('Audit log exported to CSV.', 'success');
   };
+
+  // 1mg Labs Health Concern Categories
+  const healthConcerns = [
+    { name: 'Full Body Checkup', tests: '72 Tests', icon: 'health_metrics', color: 'bg-rose-50 text-[#ff6f61]' },
+    { name: 'Diabetes Screening', tests: 'HbA1c + Fasting', icon: 'water_drop', color: 'bg-amber-50 text-amber-600' },
+    { name: 'Heart & Lipid Profile', tests: '8 Cardiac Biomarkers', icon: 'favorite', color: 'bg-red-50 text-rose-600' },
+    { name: 'Thyroid Care', tests: 'T3, T4, TSH Profile', icon: 'medication_liquid', color: 'bg-purple-50 text-purple-600' },
+    { name: 'Liver & Kidney', tests: 'LFT + KFT Complete', icon: 'vital_signs', color: 'bg-blue-50 text-blue-600' },
+    { name: 'Vitamins & Iron', tests: 'D3, B12, Ferritin', icon: 'sunny', color: 'bg-emerald-50 text-emerald-600' },
+  ];
+
+  // 1mg Labs Signature Popular Packages
+  const popularPackages = [
+    {
+      title: 'Comprehensive Gold Full Body Checkup',
+      testsCount: '78 Tests Included',
+      turnaround: 'Digital Smart Report in 24 Hrs',
+      fasting: '10-12 hrs fasting required',
+      sample: 'Blood & Urine sample at home',
+      accreditation: 'NABL Certified',
+      badge: 'Most Popular',
+    },
+    {
+      title: 'Advanced Cardiac & Lipid Risk Assessment',
+      testsCount: '14 Cardiac Markers',
+      turnaround: 'Smart Report in 18 Hrs',
+      fasting: '12 hrs fasting required',
+      sample: 'Blood draw with phlebotomist',
+      accreditation: 'CAP Accredited',
+      badge: 'Doctor Recommended',
+    },
+  ];
 
   return (
     <div className="flex flex-col w-full gap-6 max-w-7xl mx-auto">
-      {/* Minimal Header / Welcome Banner */}
-      <div className="bg-white rounded-xl p-6 border border-slate-200">
-        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
-          <div className="flex flex-col gap-1 max-w-2xl">
-            <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
-              <span className="text-teal-700 font-semibold">HIPAA Encrypted Vault</span>
+      {/* 1mg Style Hero Banner */}
+      <div className="bg-gradient-to-r from-[#fff2ef] via-white to-neutral-50 rounded-2xl p-6 sm:p-8 border border-[#ff6f61]/20 shadow-xs relative overflow-hidden">
+        <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-6 relative z-10">
+          <div className="max-w-2xl">
+            <div className="flex items-center gap-2 text-xs font-semibold text-neutral-500 mb-2 flex-wrap">
+              <span className="text-[#ff6f61] font-bold uppercase tracking-wider flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-[#ff6f61]"></span>
+                NABL Accredited Diagnostics
+              </span>
               <span aria-hidden="true">·</span>
-              <span>Synced Today at 08:42 AM</span>
+              <span className="font-mono text-neutral-700">Health ID: {profile.healthId}</span>
               <span aria-hidden="true">·</span>
-              <span>Thursday, Nov 07, 2024</span>
+              <span className="text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded text-[11px] font-bold">
+                100% Certified Phlebotomists
+              </span>
             </div>
 
-            <h1 className="text-2xl font-semibold text-slate-900 tracking-tight mt-1">
-              Good morning, {profile.fullName.split(' ')[0]}
+            <h1 className="text-2xl sm:text-3xl font-extrabold text-neutral-900 tracking-tight leading-tight">
+              Diagnostic Health Records &amp; Medicine Tracker
             </h1>
-            <p className="text-sm text-slate-600 leading-relaxed">
-              Your medical documents and daily adherence schedule in one private vault. You are on track with{' '}
-              <strong className="text-slate-900 font-semibold">
-                {takenDosesCount} of {totalScheduledToday || 4} doses
-              </strong>{' '}
-              scheduled for today.
+            <p className="text-sm text-neutral-600 mt-2 leading-relaxed">
+              Book doorstep lab sample pickup, monitor digital biomarker trends, and manage your daily medication reminders with clinical precision.
             </p>
+
+            {/* Adherence Mini Status Bar (1mg style) */}
+            <div className="mt-4 p-3 bg-white/80 rounded-xl border border-neutral-200/80 shadow-2xs max-w-lg">
+              <div className="flex items-center justify-between text-xs font-semibold text-neutral-800 mb-1.5">
+                <span className="flex items-center gap-1.5">
+                  <span className="material-symbols-outlined text-[16px] text-[#ff6f61]">alarm_on</span>
+                  <span>Today's Medication Doses</span>
+                </span>
+                <span className="font-mono font-bold text-[#ff6f61] tabular-nums">
+                  {takenDosesCount} of {totalScheduledToday || 4} Confirmed
+                </span>
+              </div>
+              <div className="w-full bg-neutral-100 h-2 rounded-full overflow-hidden">
+                <div
+                  className="bg-[#ff6f61] h-full rounded-full transition-all duration-500"
+                  style={{
+                    width: `${Math.round(((takenDosesCount) / (totalScheduledToday || 4)) * 100)}%`,
+                  }}
+                ></div>
+              </div>
+            </div>
           </div>
 
-          {/* Quick Actions */}
-          <div className="flex flex-wrap items-center gap-2 pt-2 lg:pt-0">
+          {/* Quick Action Buttons (1mg coral + clean white) */}
+          <div className="flex flex-wrap lg:flex-col gap-2.5 shrink-0">
             <button
-              className="inline-flex items-center gap-1.5 h-9 px-3.5 bg-teal-700 hover:bg-teal-800 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer shadow-xs whitespace-nowrap"
-              type="button"
-              onClick={() => setUploadModalOpen(true)}
-            >
-              <span className="material-symbols-outlined text-[16px]">upload_file</span>
-              <span>Upload Report</span>
-            </button>
-            <button
-              className="inline-flex items-center gap-1.5 h-9 px-3.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium rounded-lg transition-colors cursor-pointer whitespace-nowrap"
-              type="button"
-              onClick={() => setAddMedModalOpen(true)}
-            >
-              <span className="material-symbols-outlined text-[16px] text-teal-700">alarm_add</span>
-              <span>Add Reminder</span>
-            </button>
-            <button
-              className="inline-flex items-center gap-1.5 h-9 px-3.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium rounded-lg transition-colors cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 h-10 px-5 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-xs whitespace-nowrap"
               type="button"
               onClick={() => setAddAptModalOpen(true)}
             >
-              <span className="material-symbols-outlined text-[16px] text-blue-600">event</span>
-              <span>Book Appointment</span>
+              <span className="material-symbols-outlined text-[18px]">biotechnology</span>
+              <span>Book Lab Test / Visit</span>
             </button>
+
             <button
-              className="inline-flex items-center gap-1.5 h-9 px-3.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium rounded-lg transition-colors cursor-pointer whitespace-nowrap"
+              className="inline-flex items-center justify-center gap-2 h-10 px-4 bg-white hover:bg-neutral-50 text-neutral-800 border border-neutral-300 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-xs whitespace-nowrap"
               type="button"
-              onClick={() => setExportSummaryModalOpen(true)}
+              onClick={() => setUploadModalOpen(true)}
             >
-              <span className="material-symbols-outlined text-[16px] text-slate-500">share</span>
-              <span>Share Summary</span>
+              <span className="material-symbols-outlined text-[18px] text-[#ff6f61]">upload_file</span>
+              <span>Upload Prescription / Lab Report</span>
             </button>
+
+            <button
+              className="inline-flex items-center justify-center gap-1.5 h-9 px-3.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer whitespace-nowrap"
+              type="button"
+              onClick={() => setAddMedModalOpen(true)}
+            >
+              <span className="material-symbols-outlined text-[16px]">add_alarm</span>
+              <span>Add Medicine Reminder</span>
+            </button>
+          </div>
+        </div>
+
+        {/* 1mg Labs 4-Pillar Trust Strip */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mt-6 pt-5 border-t border-[#ff6f61]/15 text-xs text-neutral-700">
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#ff6f61] text-[20px]">verified</span>
+            <div>
+              <span className="font-bold block">100% Certified Labs</span>
+              <span className="text-[10px] text-neutral-500">NABL &amp; CAP accredited</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#ff6f61] text-[20px]">home_health</span>
+            <div>
+              <span className="font-bold block">Free Home Sample Pickup</span>
+              <span className="text-[10px] text-neutral-500">Temperature controlled</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#ff6f61] text-[20px]">mark_email_read</span>
+            <div>
+              <span className="font-bold block">Smart Reports in 24h</span>
+              <span className="text-[10px] text-neutral-500">Instant PDF &amp; vault sync</span>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            <span className="material-symbols-outlined text-[#ff6f61] text-[20px]">support_agent</span>
+            <div>
+              <span className="font-bold block">Doctor Consultation</span>
+              <span className="text-[10px] text-neutral-500">Post-test guidance</span>
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Top 4 Summary Metrics (Flat & Minimal) */}
+      {/* 1mg Labs Health Concern Circles */}
+      <div className="bg-white rounded-2xl p-5 border border-neutral-200 flex flex-col gap-3 shadow-2xs">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <h2 className="text-sm font-extrabold text-neutral-900 tracking-tight">
+              Explore Popular Diagnostic Packages &amp; Checkups
+            </h2>
+            <span className="text-[10px] font-bold text-[#ff6f61] bg-[#fff2ef] px-2 py-0.5 rounded-full">
+              Recommended
+            </span>
+          </div>
+          <button
+            onClick={() => setActiveTab('medical-records')}
+            className="text-xs font-bold text-[#ff6f61] hover:underline cursor-pointer"
+          >
+            View All Tests &rarr;
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3 pt-1">
+          {healthConcerns.map((item) => (
+            <div
+              key={item.name}
+              onClick={() => {
+                setActiveTab('medical-records');
+                showToast(`Filtering tests for ${item.name}`, 'info');
+              }}
+              className="p-3 rounded-xl border border-neutral-200/90 hover:border-[#ff6f61] hover:bg-[#fff2ef]/30 transition-all cursor-pointer group text-center flex flex-col items-center justify-center gap-2"
+            >
+              <div className={`w-11 h-11 rounded-full ${item.color} flex items-center justify-center group-hover:scale-105 transition-transform`}>
+                <span className="material-symbols-outlined text-[22px]">{item.icon}</span>
+              </div>
+              <div>
+                <span className="text-xs font-bold text-neutral-800 block leading-tight group-hover:text-[#ff6f61]">
+                  {item.name}
+                </span>
+                <span className="text-[10px] text-neutral-400 block mt-0.5 font-medium">{item.tests}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Top 4 Summary Metrics (1mg Cards Style) */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Metric 1 */}
+        {/* Metric 1: Diagnostic Reports */}
         <div
           onClick={() => setActiveTab('medical-records')}
-          className="bg-white rounded-xl p-4 border border-slate-200 hover:border-slate-300 transition-colors cursor-pointer flex flex-col justify-between"
+          className="bg-white rounded-xl p-4 border border-neutral-200 hover:border-[#ff6f61] transition-all cursor-pointer flex flex-col justify-between group shadow-2xs"
         >
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-medium">Medical Records</span>
-            <span className="text-[11px] text-teal-700 bg-teal-50 px-2 py-0.5 rounded">Vault Backed</span>
+          <div className="flex items-center justify-between text-xs text-neutral-500">
+            <span className="font-bold text-neutral-700">Diagnostic Reports</span>
+            <span className="text-[10px] text-[#ff6f61] font-bold bg-[#fff2ef] px-2 py-0.5 rounded">
+              Verified
+            </span>
           </div>
           <div className="flex items-baseline justify-between mt-3">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-semibold text-slate-900 tracking-tight tabular-nums">
+              <span className="text-3xl font-extrabold text-neutral-900 tracking-tight tabular-nums">
                 {totalReportsCount}
               </span>
-              <span className="text-xs text-slate-400">documents</span>
+              <span className="text-xs text-neutral-400">reports</span>
             </div>
-            <span className="material-symbols-outlined text-[22px] text-slate-400">folder_open</span>
+            <span className="material-symbols-outlined text-[24px] text-[#ff6f61] group-hover:scale-110 transition-transform">
+              lab_profile
+            </span>
           </div>
-          <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>+3 this month</span>
-            <span className="text-teal-700 font-medium">View library &rarr;</span>
+          <div className="mt-3 pt-2 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-500">
+            <span>Latest: Quest Panel (Normal)</span>
+            <span className="text-[#ff6f61] font-bold">Open Vault &rarr;</span>
           </div>
         </div>
 
-        {/* Metric 2 */}
+        {/* Metric 2: Medication Regimen */}
         <div
           onClick={() => setActiveTab('medicines')}
-          className="bg-white rounded-xl p-4 border border-slate-200 hover:border-slate-300 transition-colors cursor-pointer flex flex-col justify-between"
+          className="bg-white rounded-xl p-4 border border-neutral-200 hover:border-[#ff6f61] transition-all cursor-pointer flex flex-col justify-between group shadow-2xs"
         >
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-medium">Active Regimen</span>
-            <span className="text-[11px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded">Active Plan</span>
+          <div className="flex items-center justify-between text-xs text-neutral-500">
+            <span className="font-bold text-neutral-700">Active Regimen</span>
+            <span className="text-[10px] text-amber-800 font-bold bg-amber-50 px-2 py-0.5 rounded">
+              Refill Sync
+            </span>
           </div>
           <div className="flex items-baseline justify-between mt-3">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-semibold text-slate-900 tracking-tight tabular-nums">
+              <span className="text-3xl font-extrabold text-neutral-900 tracking-tight tabular-nums">
                 {activeMedsCount}
               </span>
-              <span className="text-xs text-slate-400">prescriptions</span>
+              <span className="text-xs text-neutral-400">medicines</span>
             </div>
-            <span className="material-symbols-outlined text-[22px] text-slate-400">medication</span>
+            <span className="material-symbols-outlined text-[24px] text-amber-500 group-hover:scale-110 transition-transform">
+              medication
+            </span>
           </div>
-          <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+          <div className="mt-3 pt-2 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-500">
             <span className="truncate">Next: Metformin at 1:00 PM</span>
-            <span className="text-blue-700 font-medium shrink-0">Log &rarr;</span>
+            <span className="text-[#ff6f61] font-bold shrink-0">Log Dose &rarr;</span>
           </div>
         </div>
 
-        {/* Metric 3 */}
+        {/* Metric 3: Upcoming Consultations */}
         <div
           onClick={() => setActiveTab('appointments')}
-          className="bg-white rounded-xl p-4 border border-slate-200 hover:border-slate-300 transition-colors cursor-pointer flex flex-col justify-between"
+          className="bg-white rounded-xl p-4 border border-neutral-200 hover:border-[#ff6f61] transition-all cursor-pointer flex flex-col justify-between group shadow-2xs"
         >
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-medium">Appointments</span>
-            <span className="text-[11px] text-slate-600 bg-slate-100 px-2 py-0.5 rounded">Confirmed</span>
+          <div className="flex items-center justify-between text-xs text-neutral-500">
+            <span className="font-bold text-neutral-700">Upcoming Tests &amp; Visits</span>
+            <span className="text-[10px] text-blue-700 font-bold bg-blue-50 px-2 py-0.5 rounded">
+              Scheduled
+            </span>
           </div>
           <div className="flex items-baseline justify-between mt-3">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-semibold text-slate-900 tracking-tight tabular-nums">
+              <span className="text-3xl font-extrabold text-neutral-900 tracking-tight tabular-nums">
                 {upcomingAptsCount}
               </span>
-              <span className="text-xs text-slate-400">scheduled</span>
+              <span className="text-xs text-neutral-400">scheduled</span>
             </div>
-            <span className="material-symbols-outlined text-[22px] text-slate-400">calendar_today</span>
+            <span className="material-symbols-outlined text-[24px] text-blue-600 group-hover:scale-110 transition-transform">
+              calendar_month
+            </span>
           </div>
-          <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span className="truncate">{nextAppointment?.doctorName || 'None'}</span>
-            <span className="text-slate-700 font-medium shrink-0">Schedule &rarr;</span>
+          <div className="mt-3 pt-2 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-500">
+            <span className="truncate">{nextAppointment ? nextAppointment.doctorName : 'None'}</span>
+            <span className="text-neutral-800 font-bold shrink-0">Details &rarr;</span>
           </div>
         </div>
 
-        {/* Metric 4 */}
-        <div className="bg-white rounded-xl p-4 border border-slate-200 flex flex-col justify-between">
-          <div className="flex items-center justify-between text-xs text-slate-500">
-            <span className="font-medium">Vault Storage</span>
-            <span className="text-[11px] text-slate-500 font-mono">AES-256</span>
+        {/* Metric 4: Health Security & Emergency */}
+        <div className="bg-white rounded-xl p-4 border border-neutral-200 flex flex-col justify-between shadow-2xs">
+          <div className="flex items-center justify-between text-xs text-neutral-500">
+            <span className="font-bold text-neutral-700">Emergency Health Pass</span>
+            <span className="text-[10px] text-rose-700 font-bold bg-rose-50 px-2 py-0.5 rounded">
+              ICE Ready
+            </span>
           </div>
           <div className="flex items-baseline justify-between mt-3">
             <div className="flex items-baseline gap-1.5">
-              <span className="text-3xl font-semibold text-slate-900 tracking-tight tabular-nums">
-                1.4
+              <span className="text-3xl font-extrabold text-neutral-900 tracking-tight">
+                {emergencyCard.bloodType}
               </span>
-              <span className="text-xs text-slate-400">/ 15 GB</span>
+              <span className="text-xs text-neutral-500">Blood Group</span>
             </div>
-            <span className="text-xs font-semibold text-teal-700 font-mono">9%</span>
+            <span className="material-symbols-outlined text-[24px] text-rose-600">emergency</span>
           </div>
-          <div className="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
-            <span>Client Enclave</span>
-            <span className="text-teal-700">Encrypted</span>
+          <div className="mt-3 pt-2 border-t border-neutral-100 flex items-center justify-between text-xs text-neutral-500">
+            <span>ICE: {emergencyCard.primaryContact.name.split(' ')[0]}</span>
+            <span className="text-emerald-700 font-bold">24/7 Active</span>
           </div>
         </div>
       </div>
 
-      {/* Main Split: 8 cols left, 4 cols right */}
+      {/* Main Content Split: 8 cols left, 4 cols right */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Left Column (8 cols) */}
         <div className="lg:col-span-8 flex flex-col gap-6">
-          {/* Today's Medication Schedule */}
-          <section className="bg-white rounded-xl p-6 border border-slate-200">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-slate-100 gap-3">
+          {/* Today's Medicine Reminders (1mg Clean Pillbox Style) */}
+          <section className="bg-white rounded-2xl p-6 border border-neutral-200 shadow-2xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-4 border-b border-neutral-100 gap-3">
               <div>
-                <h2 className="text-base font-semibold text-slate-900">
-                  Today’s Medication Schedule
-                </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Automated clinical reminders synced with Dr. Chen's care protocol
+                <div className="flex items-center gap-2">
+                  <h2 className="text-base font-extrabold text-neutral-900">
+                    Today’s Medicine Schedule
+                  </h2>
+                  <span className="text-[11px] bg-[#fff2ef] text-[#c93325] px-2 py-0.5 rounded-full font-bold">
+                    Adherence Tracker
+                  </span>
+                </div>
+                <p className="text-xs text-neutral-500 mt-0.5">
+                  Automated clinical dosage reminders synced with your digital care plan
                 </p>
               </div>
 
               {/* Segmented Filter */}
-              <div className="flex items-center gap-1 p-1 bg-slate-100 rounded-lg text-xs">
+              <div className="flex items-center gap-1 p-1 bg-neutral-100 rounded-lg text-xs">
                 {(['All Times', 'Morning', 'Afternoon', 'Evening'] as const).map((slot) => (
                   <button
                     key={slot}
@@ -270,8 +412,8 @@ END:VCALENDAR`;
                     onClick={() => setScheduleFilter(slot)}
                     className={`px-3 py-1 rounded-md transition-colors cursor-pointer ${
                       scheduleFilter === slot
-                        ? 'bg-white text-slate-900 font-medium shadow-xs'
-                        : 'text-slate-600 hover:text-slate-900'
+                        ? 'bg-white text-neutral-900 font-bold shadow-xs'
+                        : 'text-neutral-600 hover:text-neutral-900'
                     }`}
                   >
                     {slot}
@@ -281,7 +423,7 @@ END:VCALENDAR`;
             </div>
 
             {/* Schedule Items List */}
-            <div className="flex flex-col divide-y divide-slate-100 mt-2">
+            <div className="flex flex-col divide-y divide-neutral-100 mt-2">
               {filteredSchedule.map(({ medication, time, status, notes }) => {
                 const isTaken = status === 'taken';
                 const isDue = status === 'due_now';
@@ -293,47 +435,47 @@ END:VCALENDAR`;
                   >
                     <div className="flex items-start gap-3.5">
                       <div
-                        className={`w-10 h-10 rounded-lg flex items-center justify-center shrink-0 ${
+                        className={`w-10 h-10 rounded-xl flex items-center justify-center shrink-0 ${
                           isTaken
                             ? 'bg-emerald-50 text-emerald-700'
                             : isDue
-                            ? 'bg-amber-50 text-amber-700'
-                            : 'bg-slate-100 text-slate-600'
+                            ? 'bg-[#fff2ef] text-[#ff6f61]'
+                            : 'bg-neutral-100 text-neutral-600'
                         }`}
                       >
                         <span className="material-symbols-outlined text-[20px]">
-                          {isTaken ? 'check' : isDue ? 'alarm' : 'schedule'}
+                          {isTaken ? 'check_circle' : isDue ? 'alarm' : 'schedule'}
                         </span>
                       </div>
 
                       <div className="flex flex-col">
                         <div className="flex items-center gap-2 flex-wrap">
-                          <h3 className="text-sm font-semibold text-slate-900">
+                          <h3 className="text-sm font-bold text-neutral-900">
                             {medication.name}
                           </h3>
-                          <span className="text-xs text-slate-500 font-medium">
+                          <span className="text-xs text-neutral-500 font-medium">
                             {medication.dosage}
                           </span>
                           <span
-                            className={`text-[11px] px-2 py-0.5 rounded font-medium ${
+                            className={`text-[10px] px-2 py-0.5 rounded font-bold ${
                               isTaken
                                 ? 'bg-emerald-50 text-emerald-700'
                                 : isDue
-                                ? 'bg-amber-100 text-amber-900 font-semibold'
-                                : 'bg-slate-100 text-slate-600'
+                                ? 'bg-amber-100 text-amber-900'
+                                : 'bg-neutral-100 text-neutral-600'
                             }`}
                           >
-                            {isTaken ? 'Taken' : isDue ? `Due at ${time}` : 'Upcoming'}
+                            {isTaken ? 'Taken' : isDue ? `Due Now (${time})` : 'Upcoming'}
                           </span>
                         </div>
 
-                        <div className="flex items-center gap-2 text-xs text-slate-500 mt-1">
+                        <div className="flex items-center gap-2 text-xs text-neutral-500 mt-1">
                           <span>Scheduled: {time}</span>
                           <span aria-hidden="true">·</span>
                           <span>
                             {notes ||
                               (isTaken
-                                ? 'Logged on time with water'
+                                ? 'Confirmed on-time with water'
                                 : medication.mealInstruction || 'Daily maintenance')}
                           </span>
                         </div>
@@ -342,30 +484,30 @@ END:VCALENDAR`;
 
                     <div className="flex items-center gap-2 self-start sm:self-center shrink-0">
                       {isTaken ? (
-                        <span className="text-xs text-emerald-700 font-medium flex items-center gap-1">
-                          <span className="material-symbols-outlined text-[16px]">check_circle</span>
-                          Confirmed
+                        <span className="text-xs text-emerald-700 font-bold flex items-center gap-1">
+                          <span className="material-symbols-outlined text-[16px]">verified</span>
+                          Dose Confirmed
                         </span>
                       ) : isDue ? (
                         <>
                           <button
                             type="button"
                             onClick={() => logDose(medication.id, 'taken')}
-                            className="h-8 px-3.5 bg-teal-700 hover:bg-teal-800 text-white text-xs font-medium rounded-lg transition-colors cursor-pointer"
+                            className="h-8 px-4 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs"
                           >
                             Take Now
                           </button>
                           <button
                             type="button"
                             onClick={() => logDose(medication.id, 'skipped', 'Skipped by patient')}
-                            className="h-8 px-3 text-slate-600 hover:text-slate-900 text-xs rounded-lg transition-colors cursor-pointer"
+                            className="h-8 px-3 text-neutral-600 hover:text-neutral-900 text-xs rounded-lg transition-colors cursor-pointer"
                           >
                             Skip
                           </button>
                         </>
                       ) : (
-                        <span className="text-xs text-slate-400">
-                          Alert set (7:45 PM)
+                        <span className="text-xs text-neutral-400 font-medium">
+                          Alert scheduled
                         </span>
                       )}
                     </div>
@@ -375,47 +517,47 @@ END:VCALENDAR`;
             </div>
           </section>
 
-          {/* Recent Medical Records */}
-          <section className="bg-white rounded-xl p-6 border border-slate-200">
-            <div className="flex items-center justify-between pb-4 border-b border-slate-100">
+          {/* Recent Diagnostic Reports (1mg Labs Card Style) */}
+          <section className="bg-white rounded-2xl p-6 border border-neutral-200 shadow-2xs">
+            <div className="flex items-center justify-between pb-4 border-b border-neutral-100">
               <div>
-                <h2 className="text-base font-semibold text-slate-900">
-                  Recent Medical Records
+                <h2 className="text-base font-extrabold text-neutral-900">
+                  Diagnostic Smart Reports
                 </h2>
-                <p className="text-xs text-slate-500 mt-0.5">
-                  Verified clinical reports and laboratory summaries
+                <p className="text-xs text-neutral-500 mt-0.5">
+                  NABL accredited pathology and imaging reports with clinical interpretation
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setActiveTab('medical-records')}
-                className="text-xs font-medium text-teal-700 hover:text-teal-800 cursor-pointer"
+                className="text-xs font-bold text-[#ff6f61] hover:underline transition-colors cursor-pointer"
               >
                 Browse All {totalReportsCount} &rarr;
               </button>
             </div>
 
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-neutral-100">
               {recentReports.map((report) => (
                 <div
                   key={report.id}
                   className="py-3.5 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                 >
                   <div className="flex items-start gap-3 min-w-0">
-                    <div className="w-9 h-9 rounded-lg bg-slate-100 text-slate-700 flex items-center justify-center shrink-0 mt-0.5">
-                      <span className="material-symbols-outlined text-[18px]">description</span>
+                    <div className="w-10 h-10 rounded-xl bg-[#fff2ef] text-[#ff6f61] flex items-center justify-center shrink-0 mt-0.5">
+                      <span className="material-symbols-outlined text-[20px]">science</span>
                     </div>
                     <div className="min-w-0">
                       <div className="flex items-center gap-2 flex-wrap">
-                        <h3 className="text-sm font-semibold text-slate-900 truncate">
+                        <h3 className="text-sm font-bold text-neutral-900 truncate">
                           {report.title}
                         </h3>
-                        <span className="text-[11px] text-slate-500 font-mono">
+                        <span className="text-[11px] text-neutral-500 font-mono">
                           {report.fileSizeFormatted}
                         </span>
                       </div>
-                      <div className="flex items-center gap-2 text-xs text-slate-500 mt-0.5 flex-wrap">
-                        <span>{report.category}</span>
+                      <div className="flex items-center gap-2 text-xs text-neutral-500 mt-0.5 flex-wrap">
+                        <span className="font-semibold text-[#ff6f61]">{report.category}</span>
                         <span aria-hidden="true">·</span>
                         <span>{report.testDate}</span>
                         <span aria-hidden="true">·</span>
@@ -426,18 +568,18 @@ END:VCALENDAR`;
 
                   <div className="flex items-center gap-2 shrink-0">
                     <button
-                      className="px-3 py-1.5 bg-slate-50 hover:bg-slate-100 text-slate-700 border border-slate-200 text-xs font-medium rounded-lg transition-colors cursor-pointer"
+                      className="px-3 py-1.5 bg-neutral-50 hover:bg-[#fff2ef] text-neutral-700 hover:text-[#ff6f61] border border-neutral-200 text-xs font-bold rounded-lg transition-colors cursor-pointer"
                       type="button"
                       onClick={() => {
                         setSelectedReportId(report.id);
                         setActiveTab('medical-records');
                       }}
                     >
-                      View
+                      Smart View
                     </button>
                     <button
-                      className="p-1.5 text-slate-500 hover:text-slate-900 hover:bg-slate-100 rounded-lg transition-colors cursor-pointer"
-                      title="Download document"
+                      className="p-1.5 text-neutral-500 hover:text-[#ff6f61] hover:bg-neutral-100 rounded-lg transition-colors cursor-pointer"
+                      title="Download PDF report"
                       type="button"
                       onClick={() => downloadReport(report)}
                     >
@@ -452,40 +594,44 @@ END:VCALENDAR`;
 
         {/* Right Column (4 cols) */}
         <div className="lg:col-span-4 flex flex-col gap-6">
-          {/* Next Appointment Card */}
+          {/* Upcoming Consultation / Home Sample Card */}
           {nextAppointment && (
-            <div className="bg-white rounded-xl p-5 border border-slate-200 flex flex-col gap-4">
-              <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-                <span className="text-xs font-semibold text-slate-900">Next Appointment</span>
-                <span className="text-[11px] text-blue-700 bg-blue-50 px-2 py-0.5 rounded font-medium">
-                  In 7 Days
+            <div className="bg-white rounded-2xl p-5 border border-neutral-200 shadow-2xs flex flex-col gap-4">
+              <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
+                <span className="text-xs font-extrabold text-neutral-900 uppercase tracking-wider">
+                  Upcoming Appointment
+                </span>
+                <span className="text-[10px] text-[#ff6f61] font-bold bg-[#fff2ef] px-2 py-0.5 rounded">
+                  Confirmed
                 </span>
               </div>
 
               <div className="flex items-start gap-3">
                 <img
-                  className="w-11 h-11 rounded-lg object-cover shrink-0"
+                  className="w-12 h-12 rounded-xl object-cover shrink-0 ring-1 ring-neutral-200"
                   src={nextAppointment.doctorAvatar}
                   alt={nextAppointment.doctorName}
                 />
                 <div className="min-w-0">
-                  <h3 className="text-sm font-semibold text-slate-900 truncate">
+                  <h3 className="text-sm font-bold text-neutral-900 truncate">
                     {nextAppointment.doctorName}
                   </h3>
-                  <p className="text-xs text-slate-600 truncate">{nextAppointment.doctorTitle}</p>
-                  <p className="text-[11px] text-slate-400 truncate mt-0.5">
+                  <p className="text-xs text-[#ff6f61] font-semibold truncate">
+                    {nextAppointment.specialty}
+                  </p>
+                  <p className="text-[11px] text-neutral-500 truncate mt-0.5">
                     {nextAppointment.clinicHospital}
                   </p>
                 </div>
               </div>
 
-              <div className="p-3 bg-slate-50 rounded-lg space-y-1 text-xs text-slate-600">
-                <div className="flex items-center gap-2 font-medium text-slate-900">
-                  <span className="material-symbols-outlined text-[16px] text-blue-600">event</span>
+              <div className="p-3 bg-neutral-50 rounded-xl space-y-1.5 text-xs text-neutral-600">
+                <div className="flex items-center gap-2 font-bold text-neutral-900">
+                  <span className="material-symbols-outlined text-[16px] text-[#ff6f61]">event</span>
                   <span>{nextAppointment.appointmentDate} · {nextAppointment.appointmentTime}</span>
                 </div>
-                <div className="flex items-center gap-2 text-slate-500">
-                  <span className="material-symbols-outlined text-[16px] text-slate-400">location_on</span>
+                <div className="flex items-center gap-2 text-neutral-500">
+                  <span className="material-symbols-outlined text-[16px] text-neutral-400">location_on</span>
                   <span className="truncate">{nextAppointment.locationRoom}</span>
                 </div>
               </div>
@@ -494,97 +640,101 @@ END:VCALENDAR`;
                 <button
                   type="button"
                   onClick={handleAddToCalendar}
-                  className="h-8 px-2.5 bg-slate-900 hover:bg-slate-800 text-white text-xs font-medium rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                  className="h-8 px-2.5 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer shadow-xs"
                 >
-                  <span className="material-symbols-outlined text-[15px]">event</span>
-                  <span>Add to Calendar</span>
+                  <span className="material-symbols-outlined text-[15px]">calendar_add_on</span>
+                  <span>Calendar</span>
                 </button>
                 <button
                   type="button"
-                  onClick={() => showToast('Opening facility directions...', 'info')}
-                  className="h-8 px-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-medium rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
+                  onClick={() => showToast('Opening location directions...', 'info')}
+                  className="h-8 px-2.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-bold rounded-lg flex items-center justify-center gap-1 transition-colors cursor-pointer"
                 >
+                  <span className="material-symbols-outlined text-[15px] text-neutral-500">near_me</span>
                   <span>Directions</span>
                 </button>
               </div>
             </div>
           )}
 
-          {/* Emergency Health Card */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200 flex flex-col gap-3">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <span className="text-xs font-semibold text-slate-900">Emergency Health Card</span>
-              <span className="text-[11px] text-rose-700 bg-rose-50 px-2 py-0.5 rounded font-medium">
-                ICE Profile
+          {/* 1mg Labs Featured Package Spotlight */}
+          <div className="bg-gradient-to-br from-amber-50/60 via-white to-[#fff2ef]/40 rounded-2xl p-5 border border-amber-200 shadow-2xs flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-2 border-b border-amber-100">
+              <span className="text-[11px] font-extrabold uppercase text-amber-800 tracking-wider flex items-center gap-1">
+                <span className="material-symbols-outlined text-[16px] text-amber-600">stars</span>
+                Diagnostic Spotlight
+              </span>
+              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
+                Home Pickup
               </span>
             </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-slate-50 rounded-lg">
-                <span className="text-[11px] text-slate-500 block">Blood Type</span>
-                <span className="text-2xl font-bold text-slate-900 mt-0.5 block">
-                  {emergencyCard.bloodType}
-                </span>
-                <span className="text-[11px] text-slate-400 leading-tight block mt-0.5">
-                  Universal Acceptor
-                </span>
-              </div>
-
-              <div className="p-3 bg-slate-50 rounded-lg">
-                <span className="text-[11px] text-slate-500 block">Known Allergies</span>
-                <div className="mt-1 space-y-1 text-xs font-medium text-rose-700">
-                  {emergencyCard.allergies.map((a) => (
-                    <div key={a} className="flex items-center gap-1">
-                      <span>•</span>
-                      <span>{a}</span>
-                    </div>
-                  ))}
+            <div>
+              <h4 className="text-sm font-extrabold text-neutral-900 leading-snug">
+                {popularPackages[0].title}
+              </h4>
+              <p className="text-xs text-neutral-500 mt-1">
+                {popularPackages[0].testsCount} · {popularPackages[0].turnaround}
+              </p>
+              <div className="mt-2 text-[11px] text-neutral-600 bg-white/80 p-2 rounded-lg border border-amber-100 space-y-1">
+                <div className="flex items-center gap-1.5 text-neutral-700">
+                  <span className="material-symbols-outlined text-[14px] text-emerald-600">check</span>
+                  <span>{popularPackages[0].sample}</span>
+                </div>
+                <div className="flex items-center gap-1.5 text-neutral-700">
+                  <span className="material-symbols-outlined text-[14px] text-amber-600">info</span>
+                  <span>{popularPackages[0].fasting}</span>
                 </div>
               </div>
             </div>
 
-            <div className="p-3 bg-slate-50 rounded-lg flex items-center justify-between">
+            <button
+              onClick={() => {
+                setAddAptModalOpen(true);
+                showToast('Booking Home Sample Collection...', 'success');
+              }}
+              className="w-full py-2 bg-[#ff6f61] hover:bg-[#e55345] text-white font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+            >
+              <span className="material-symbols-outlined text-[16px]">home_health</span>
+              <span>Book Home Sample Collection</span>
+            </button>
+          </div>
+
+          {/* Emergency SOS Pass */}
+          <div className="bg-white rounded-2xl p-5 border border-neutral-200 shadow-2xs flex flex-col gap-3">
+            <div className="flex items-center justify-between pb-3 border-b border-neutral-100">
+              <div className="flex items-center gap-1.5 text-rose-700">
+                <span className="material-symbols-outlined text-[18px]">emergency</span>
+                <span className="text-xs font-bold uppercase tracking-wider">Emergency ICE Card</span>
+              </div>
+              <span className="text-[10px] text-neutral-500 font-mono">Blood Group: {emergencyCard.bloodType}</span>
+            </div>
+
+            <div className="p-3 bg-neutral-50 rounded-xl flex items-center justify-between text-xs">
               <div>
-                <span className="text-[11px] text-slate-400 block">Emergency Contact</span>
-                <span className="text-xs font-semibold text-slate-900 block">
-                  {emergencyCard.primaryContact.name}
+                <span className="text-[10px] text-neutral-400 block uppercase font-bold">ICE Contact</span>
+                <span className="font-bold text-neutral-900 block">
+                  {emergencyCard.primaryContact.name} ({emergencyCard.primaryContact.relationship})
                 </span>
-                <span className="text-[11px] text-slate-500">
-                  {emergencyCard.primaryContact.relationship}
+                <span className="text-[11px] text-neutral-600 font-mono">
+                  {emergencyCard.primaryContact.phone}
                 </span>
               </div>
               <a
-                className="w-8 h-8 rounded-full bg-teal-50 text-teal-700 hover:bg-teal-700 hover:text-white transition-colors flex items-center justify-center"
+                className="w-8 h-8 rounded-full bg-rose-600 text-white hover:bg-rose-700 transition-colors flex items-center justify-center shadow-xs"
                 href={`tel:${emergencyCard.primaryContact.phone.replace(/[^0-9]/g, '')}`}
+                title="Call ICE Contact"
               >
                 <span className="material-symbols-outlined text-[16px]">call</span>
               </a>
             </div>
-          </div>
 
-          {/* Audit Log (Minimalist) */}
-          <div className="bg-white rounded-xl p-5 border border-slate-200 flex flex-col gap-3">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
-              <span className="text-xs font-semibold text-slate-900">Vault Access Trail</span>
-              <span className="text-[11px] text-slate-400">Audit Log</span>
-            </div>
-
-            <div className="space-y-3">
-              {auditLogs.slice(0, 3).map((item) => (
-                <div key={item.id} className="text-xs">
-                  <p className="font-medium text-slate-800 leading-snug">{item.title}</p>
-                  <p className="text-[11px] text-slate-400 mt-0.5">{item.timestamp}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="pt-2 border-t border-slate-100">
+            <div className="pt-2 border-t border-neutral-100">
               <button
                 type="button"
                 onClick={handleExportAuditCsv}
-                className="w-full py-1.5 text-xs text-slate-600 hover:text-slate-900 hover:bg-slate-50 rounded-lg font-medium transition-colors cursor-pointer text-center"
+                className="w-full py-1.5 text-xs text-neutral-600 hover:text-[#ff6f61] hover:bg-neutral-50 rounded-lg font-bold transition-colors cursor-pointer text-center"
               >
-                Export Audit Log (CSV)
+                Export Audit Trail (CSV)
               </button>
             </div>
           </div>
