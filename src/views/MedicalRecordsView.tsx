@@ -263,6 +263,42 @@ export const MedicalRecordsView: React.FC = () => {
         })}
       </div>
 
+      {/* 1mg Labs Diagnostic Vault Trust Banner */}
+      <div className="bg-gradient-to-r from-[#fff2ef] via-white to-neutral-50 rounded-xl p-4 border border-[#ff6f61]/25 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-2xs">
+        <div className="flex items-center gap-3.5">
+          <div className="w-14 h-14 rounded-lg overflow-hidden shrink-0 border border-neutral-200">
+            <img
+              src="/src/assets/images/lab_blood_testing_1793209760590.jpg"
+              alt="Automated diagnostic blood testing lab"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover"
+            />
+          </div>
+          <div>
+            <div className="flex items-center gap-2">
+              <span className="text-xs font-bold text-neutral-900">
+                Accredited Diagnostic Reports Vault
+              </span>
+              <span className="text-[10px] text-[#ff6f61] font-bold bg-[#fff2ef] px-1.5 py-0.5 rounded">
+                NABL Certified
+              </span>
+            </div>
+            <p className="text-[11px] text-neutral-500 mt-0.5">
+              All pathology, imaging, and biochemistry reports are verified with cryptographic hash integrity and smart biomarker parsing.
+            </p>
+          </div>
+        </div>
+
+        <button
+          type="button"
+          onClick={() => setUploadModalOpen(true)}
+          className="shrink-0 h-8 px-3.5 bg-white hover:bg-neutral-50 text-neutral-800 border border-neutral-300 text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
+        >
+          <span className="material-symbols-outlined text-[15px] text-[#ff6f61]">add_photo_alternate</span>
+          <span>Upload New Report</span>
+        </button>
+      </div>
+
       {/* Main View: Cards Grid (8 cols) + Inspector Flyout (4 cols) */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
         {/* Document Cards */}

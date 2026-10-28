@@ -163,36 +163,72 @@ END:VCALENDAR`;
                 ></div>
               </div>
             </div>
+
+            {/* Quick Action Buttons (1mg coral + clean white) */}
+            <div className="flex flex-wrap items-center gap-2.5 mt-5">
+              <button
+                className="inline-flex items-center justify-center gap-2 h-10 px-5 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-xs whitespace-nowrap"
+                type="button"
+                onClick={() => setAddAptModalOpen(true)}
+              >
+                <span className="material-symbols-outlined text-[18px]">biotechnology</span>
+                <span>Book Lab Test / Home Pickup</span>
+              </button>
+
+              <button
+                className="inline-flex items-center justify-center gap-2 h-10 px-4 bg-white hover:bg-neutral-50 text-neutral-800 border border-neutral-300 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-xs whitespace-nowrap"
+                type="button"
+                onClick={() => setUploadModalOpen(true)}
+              >
+                <span className="material-symbols-outlined text-[18px] text-[#ff6f61]">upload_file</span>
+                <span>Upload Prescription / Lab Report</span>
+              </button>
+
+              <button
+                className="inline-flex items-center justify-center gap-1.5 h-10 px-3.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer whitespace-nowrap"
+                type="button"
+                onClick={() => setAddMedModalOpen(true)}
+              >
+                <span className="material-symbols-outlined text-[16px]">add_alarm</span>
+                <span>Add Medicine</span>
+              </button>
+            </div>
           </div>
 
-          {/* Quick Action Buttons (1mg coral + clean white) */}
-          <div className="flex flex-wrap lg:flex-col gap-2.5 shrink-0">
-            <button
-              className="inline-flex items-center justify-center gap-2 h-10 px-5 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-xl transition-all cursor-pointer shadow-xs whitespace-nowrap"
-              type="button"
-              onClick={() => setAddAptModalOpen(true)}
-            >
-              <span className="material-symbols-outlined text-[18px]">biotechnology</span>
-              <span>Book Lab Test / Visit</span>
-            </button>
-
-            <button
-              className="inline-flex items-center justify-center gap-2 h-10 px-4 bg-white hover:bg-neutral-50 text-neutral-800 border border-neutral-300 text-xs font-bold rounded-xl transition-all cursor-pointer shadow-xs whitespace-nowrap"
-              type="button"
-              onClick={() => setUploadModalOpen(true)}
-            >
-              <span className="material-symbols-outlined text-[18px] text-[#ff6f61]">upload_file</span>
-              <span>Upload Prescription / Lab Report</span>
-            </button>
-
-            <button
-              className="inline-flex items-center justify-center gap-1.5 h-9 px-3.5 bg-neutral-100 hover:bg-neutral-200 text-neutral-700 text-xs font-semibold rounded-xl transition-colors cursor-pointer whitespace-nowrap"
-              type="button"
-              onClick={() => setAddMedModalOpen(true)}
-            >
-              <span className="material-symbols-outlined text-[16px]">add_alarm</span>
-              <span>Add Medicine Reminder</span>
-            </button>
+          {/* 1mg Home Sample Collection Visual Spotlight Card */}
+          <div className="w-full lg:w-72 shrink-0 bg-white rounded-xl border border-[#ff6f61]/25 overflow-hidden shadow-xs flex flex-col">
+            <div className="relative h-32 w-full overflow-hidden bg-neutral-100">
+              <img
+                src="/src/assets/images/home_sample_pickup_1793209760555.jpg"
+                alt="Phlebotomist conducting doorstep blood sample collection"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
+              />
+              <span className="absolute top-2 left-2 bg-[#ff6f61] text-white text-[10px] font-bold px-2 py-0.5 rounded shadow-xs">
+                Free Home Pickup
+              </span>
+            </div>
+            <div className="p-3 flex flex-col justify-between flex-1 gap-2">
+              <div>
+                <h4 className="text-xs font-bold text-neutral-900 leading-snug">
+                  Doorstep Blood Sample Collection
+                </h4>
+                <p className="text-[11px] text-neutral-500 mt-0.5 leading-tight">
+                  Certified phlebotomists follow 100% sterile protocols with temperature-controlled cold chain.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setAddAptModalOpen(true);
+                  showToast('Scheduling doorstep phlebotomist collection...', 'info');
+                }}
+                className="w-full py-1.5 bg-[#fff2ef] hover:bg-[#ffe4de] text-[#ff6f61] text-[11px] font-bold rounded-lg transition-colors flex items-center justify-center gap-1 cursor-pointer"
+              >
+                <span>Schedule Sample Pickup</span>
+                <span className="material-symbols-outlined text-[14px]">arrow_forward</span>
+              </button>
+            </div>
           </div>
         </div>
 
@@ -658,45 +694,59 @@ END:VCALENDAR`;
           )}
 
           {/* 1mg Labs Featured Package Spotlight */}
-          <div className="bg-gradient-to-br from-amber-50/60 via-white to-[#fff2ef]/40 rounded-2xl p-5 border border-amber-200 shadow-2xs flex flex-col gap-3">
-            <div className="flex items-center justify-between pb-2 border-b border-amber-100">
-              <span className="text-[11px] font-extrabold uppercase text-amber-800 tracking-wider flex items-center gap-1">
-                <span className="material-symbols-outlined text-[16px] text-amber-600">stars</span>
-                Diagnostic Spotlight
-              </span>
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded">
-                Home Pickup
-              </span>
-            </div>
-            <div>
-              <h4 className="text-sm font-extrabold text-neutral-900 leading-snug">
-                {popularPackages[0].title}
-              </h4>
-              <p className="text-xs text-neutral-500 mt-1">
-                {popularPackages[0].testsCount} · {popularPackages[0].turnaround}
-              </p>
-              <div className="mt-2 text-[11px] text-neutral-600 bg-white/80 p-2 rounded-lg border border-amber-100 space-y-1">
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <span className="material-symbols-outlined text-[14px] text-emerald-600">check</span>
-                  <span>{popularPackages[0].sample}</span>
-                </div>
-                <div className="flex items-center gap-1.5 text-neutral-700">
-                  <span className="material-symbols-outlined text-[14px] text-amber-600">info</span>
-                  <span>{popularPackages[0].fasting}</span>
-                </div>
+          <div className="bg-white rounded-2xl border border-neutral-200 overflow-hidden shadow-2xs flex flex-col">
+            <div className="relative h-32 w-full overflow-hidden bg-neutral-100">
+              <img
+                src="/src/assets/images/lab_blood_testing_1793209760590.jpg"
+                alt="Clinical blood test vacutainers in automated testing lab"
+                referrerPolicy="no-referrer"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent"></div>
+              <div className="absolute top-2.5 left-2.5 flex items-center gap-1.5">
+                <span className="text-[10px] font-bold text-white bg-[#ff6f61] px-2 py-0.5 rounded shadow-xs">
+                  {popularPackages[0].badge}
+                </span>
+                <span className="text-[10px] font-bold text-neutral-800 bg-white/95 px-2 py-0.5 rounded shadow-xs">
+                  NABL Certified
+                </span>
+              </div>
+              <div className="absolute bottom-2 left-2.5 right-2.5 text-white">
+                <span className="text-[11px] font-bold drop-shadow-xs">100% Barcoded Sample Integrity</span>
               </div>
             </div>
 
-            <button
-              onClick={() => {
-                setAddAptModalOpen(true);
-                showToast('Booking Home Sample Collection...', 'success');
-              }}
-              className="w-full py-2 bg-[#ff6f61] hover:bg-[#e55345] text-white font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
-            >
-              <span className="material-symbols-outlined text-[16px]">home_health</span>
-              <span>Book Home Sample Collection</span>
-            </button>
+            <div className="p-5 flex flex-col gap-3">
+              <div>
+                <h4 className="text-sm font-extrabold text-neutral-900 leading-snug">
+                  {popularPackages[0].title}
+                </h4>
+                <p className="text-xs text-neutral-500 mt-1">
+                  {popularPackages[0].testsCount} · {popularPackages[0].turnaround}
+                </p>
+                <div className="mt-2 text-[11px] text-neutral-600 bg-neutral-50 p-2.5 rounded-lg border border-neutral-100 space-y-1">
+                  <div className="flex items-center gap-1.5 text-neutral-700">
+                    <span className="material-symbols-outlined text-[14px] text-emerald-600">check</span>
+                    <span>{popularPackages[0].sample}</span>
+                  </div>
+                  <div className="flex items-center gap-1.5 text-neutral-700">
+                    <span className="material-symbols-outlined text-[14px] text-amber-600">info</span>
+                    <span>{popularPackages[0].fasting}</span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                onClick={() => {
+                  setAddAptModalOpen(true);
+                  showToast('Booking Home Sample Collection...', 'success');
+                }}
+                className="w-full py-2 bg-[#ff6f61] hover:bg-[#e55345] text-white font-bold text-xs rounded-xl transition-colors flex items-center justify-center gap-1.5 shadow-xs cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[16px]">home_health</span>
+                <span>Book Home Sample Collection</span>
+              </button>
+            </div>
           </div>
 
           {/* Emergency SOS Pass */}

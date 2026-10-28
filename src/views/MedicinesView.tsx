@@ -231,36 +231,56 @@ export const MedicinesView: React.FC = () => {
           </div>
         </div>
 
-        {/* Refill Insight Card */}
-        <div className="lg:col-span-4 bg-white rounded-xl p-5 border border-slate-200 flex flex-col justify-between">
-          <div>
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100 text-xs">
-              <span className="font-bold text-[#f58220] flex items-center gap-1">
-                <span className="material-symbols-outlined text-[15px]">local_pharmacy</span>
-                Pharmacy Refill Alert
-              </span>
-              <span className="text-[11px] font-mono text-rose-600 font-semibold">8 Pills Left</span>
-            </div>
-            <h3 className="text-sm font-bold text-slate-900 mt-3">
-              Lisinopril 10 mg
-            </h3>
-            <p className="text-xs text-slate-500 mt-1 leading-relaxed">
-              Prescription running low. Order with fast doorstep delivery to maintain treatment continuity.
-            </p>
-            <div className="mt-3 p-2.5 bg-orange-50/50 rounded-lg text-xs flex justify-between text-slate-700 border border-orange-100">
-              <span className="font-medium text-[#c2410c]">Direct Pharmacy Delivery</span>
-              <span className="font-semibold text-slate-900">Dr. Rajesh Sharma</span>
-            </div>
+        {/* 1mg Style Doorstep Pharmacy Refill Card */}
+        <div className="lg:col-span-4 bg-white rounded-xl border border-neutral-200 overflow-hidden flex flex-col justify-between shadow-2xs">
+          <div className="relative h-28 w-full bg-neutral-100 overflow-hidden">
+            <img
+              src="/src/assets/images/pharmacy_medicine_box_1793209761740.jpg"
+              alt="Prescription medications and genuine pharmacy delivery box"
+              referrerPolicy="no-referrer"
+              className="w-full h-full object-cover object-center"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
+            <span className="absolute top-2 left-2 text-[10px] font-bold text-white bg-[#ff6f61] px-2 py-0.5 rounded shadow-xs">
+              Doorstep Pharmacy Refill
+            </span>
+            <span className="absolute bottom-2 left-2 text-[11px] font-bold text-white drop-shadow-xs">
+              100% Genuine Certified Medicines
+            </span>
           </div>
 
-          <button
-            className="w-full mt-4 h-9 bg-[#f58220] hover:bg-[#e06d0c] text-white text-xs font-semibold rounded-lg transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
-            type="button"
-            onClick={() => requestRefill('med-lisinopril')}
-          >
-            <span className="material-symbols-outlined text-[16px]">shopping_bag</span>
-            <span>Order Doorstep Refill</span>
-          </button>
+          <div className="p-4 flex flex-col justify-between flex-1">
+            <div>
+              <div className="flex items-center justify-between pb-2 border-b border-neutral-100 text-xs">
+                <span className="font-bold text-[#ff6f61] flex items-center gap-1">
+                  <span className="material-symbols-outlined text-[15px]">local_pharmacy</span>
+                  Refill Alert
+                </span>
+                <span className="text-[11px] font-mono text-rose-600 font-bold bg-rose-50 px-2 py-0.5 rounded">
+                  8 Pills Left
+                </span>
+              </div>
+              <h3 className="text-sm font-bold text-neutral-900 mt-2.5">
+                Lisinopril 10 mg
+              </h3>
+              <p className="text-xs text-neutral-500 mt-1 leading-relaxed">
+                Prescription running low. Order with express doorstep delivery to ensure uninterrupted cardiac regimen.
+              </p>
+              <div className="mt-2.5 p-2 bg-[#fff2ef]/70 rounded-lg text-xs flex justify-between text-neutral-700 border border-[#ff6f61]/20">
+                <span className="font-semibold text-[#ff6f61]">Express Delivery</span>
+                <span className="font-bold text-neutral-800">Order Today, Delivers Tomorrow</span>
+              </div>
+            </div>
+
+            <button
+              className="w-full mt-3.5 h-9 bg-[#ff6f61] hover:bg-[#e55345] text-white text-xs font-bold rounded-lg transition-colors cursor-pointer shadow-xs flex items-center justify-center gap-1.5"
+              type="button"
+              onClick={() => requestRefill('med-lisinopril')}
+            >
+              <span className="material-symbols-outlined text-[16px]">shopping_bag</span>
+              <span>Order Doorstep Refill</span>
+            </button>
+          </div>
         </div>
       </div>
 

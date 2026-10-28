@@ -85,7 +85,7 @@ export interface Appointment {
   appointmentTime: string; // e.g. "10:30 AM"
   endTime?: string; // e.g. "11:15 AM"
   locationRoom: string;
-  type: 'Doctor Visit' | 'Laboratory Test' | 'Specialist Consultation' | 'Procedure';
+  type: 'Doctor Visit' | 'Laboratory Test' | 'Specialist Consultation' | 'Procedure' | 'Teleconsultation';
   status: 'upcoming' | 'completed' | 'cancelled';
   notes?: string;
   doctorAvatar?: string;

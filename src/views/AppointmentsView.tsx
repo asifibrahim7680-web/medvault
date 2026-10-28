@@ -5,6 +5,7 @@ import { Appointment } from '../types';
 export const AppointmentsView: React.FC = () => {
   const {
     appointments,
+    careProviders,
     setAddAptModalOpen,
     cancelAppointment,
     updateAppointment,
@@ -364,6 +365,86 @@ END:VCALENDAR`;
           </div>
         </div>
       )}
+
+      {/* 1mg Style Consult Top Doctors & Diagnostic Centers Online */}
+      <section className="bg-white rounded-2xl p-6 border border-neutral-200 shadow-2xs flex flex-col gap-4">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between pb-3 border-b border-neutral-100 gap-2">
+          <div>
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-extrabold text-neutral-900">
+                Consult Verified Specialists &amp; Book Labs Online
+              </h2>
+              <span className="text-[10px] text-[#ff6f61] font-bold bg-[#fff2ef] px-2 py-0.5 rounded">
+                Verified Medical Team
+              </span>
+            </div>
+            <p className="text-xs text-neutral-500 mt-0.5">
+              Connect via encrypted teleconsultation or schedule certified phlebotomist sample collection
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={() => setAddAptModalOpen(true)}
+            className="text-xs font-bold text-[#ff6f61] hover:underline self-start sm:self-auto cursor-pointer"
+          >
+            Schedule Consultation &rarr;
+          </button>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
+          {careProviders.map((prov) => (
+            <div
+              key={prov.id}
+              className="bg-neutral-50/70 hover:bg-white rounded-xl p-4 border border-neutral-200/80 hover:border-[#ff6f61] transition-all flex flex-col justify-between group shadow-2xs"
+            >
+              <div>
+                <div className="flex items-center gap-3 mb-3">
+                  <img
+                    src={prov.avatar}
+                    alt={prov.name}
+                    referrerPolicy="no-referrer"
+                    className="w-12 h-12 rounded-xl object-cover ring-1 ring-neutral-200 group-hover:ring-[#ff6f61]/40 shrink-0"
+                  />
+                  <div className="min-w-0">
+                    <span className="text-[10px] font-bold text-[#ff6f61] block uppercase tracking-wider truncate">
+                      {prov.departmentTag || 'Specialist'}
+                    </span>
+                    <h3 className="text-xs font-bold text-neutral-900 truncate">
+                      {prov.name}
+                    </h3>
+                    <p className="text-[11px] text-neutral-500 truncate mt-0.5">
+                      {prov.specialty}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="text-[11px] text-neutral-600 bg-white p-2.5 rounded-lg border border-neutral-200/60 space-y-1 mb-3">
+                  <div className="flex items-center justify-between text-neutral-500">
+                    <span>Facility:</span>
+                    <span className="font-semibold text-neutral-800 truncate ml-1">{prov.clinic}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-neutral-500">
+                    <span>Last Consult:</span>
+                    <span className="font-mono text-neutral-700">{prov.lastVisit || 'Initial Visit'}</span>
+                  </div>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => {
+                  setAddAptModalOpen(true);
+                  showToast(`Initiating booking for ${prov.name}...`, 'info');
+                }}
+                className="w-full py-1.5 bg-[#fff2ef] hover:bg-[#ff6f61] text-[#ff6f61] hover:text-white text-xs font-bold rounded-lg transition-colors flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <span className="material-symbols-outlined text-[15px]">calendar_today</span>
+                <span>Book Slot</span>
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Cancel Modal */}
       {cancelConfirmId && (
